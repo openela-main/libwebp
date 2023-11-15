@@ -1,0 +1,68 @@
+
+# HG changeset patch
+# User Timothy Nikkel <tnikkel@gmail.com>
+# Date 1678835815 0
+# Node ID 53b805c752ff23080e100eda2b3b4280d4370b2e
+# Parent  8fcdaf8d685d5903b127e041feb1716637b6008f
+Bug 1819244. Cherry pic webp commit fix. r=aosmond, a=dsmith
+
+https://github.com/webmproject/libwebp/commit/a486d800b60d0af4cc0836bf7ed8f21e12974129
+
+Differential Revision: https://phabricator.services.mozilla.com/D171814
+
+diff --git a/media/libwebp/src/enc/alpha_enc.c b/media/libwebp/src/enc/alpha_enc.c
+--- a/src/enc/alpha_enc.c
++++ b/src/enc/alpha_enc.c
+@@ -8,16 +8,17 @@
+ // -----------------------------------------------------------------------------
+ //
+ // Alpha-plane compression.
+ //
+ // Author: Skal (pascal.massimino@gmail.com)
+ 
+ #include <assert.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #include "src/enc/vp8i_enc.h"
+ #include "src/dsp/dsp.h"
+ #include "src/utils/filters_utils.h"
+ #include "src/utils/quant_levels_utils.h"
+ #include "src/utils/utils.h"
+ #include "src/webp/format_constants.h"
+ 
+@@ -143,31 +144,32 @@ static int EncodeAlphaInternal(const uin
+       output_size = VP8LBitWriterNumBytes(&tmp_bw);
+       if (output_size > data_size) {
+         // compressed size is larger than source! Revert to uncompressed mode.
+         method = ALPHA_NO_COMPRESSION;
+         VP8LBitWriterWipeOut(&tmp_bw);
+       }
+     } else {
+       VP8LBitWriterWipeOut(&tmp_bw);
++      memset(&result->bw, 0, sizeof(result->bw));
+       return 0;
+     }
+   }
+ 
+   if (method == ALPHA_NO_COMPRESSION) {
+     output = alpha_src;
+     output_size = data_size;
+     ok = 1;
+   }
+ 
+   // Emit final result.
+   header = method | (filter << 2);
+   if (reduce_levels) header |= ALPHA_PREPROCESSED_LEVELS << 4;
+ 
+-  VP8BitWriterInit(&result->bw, ALPHA_HEADER_LEN + output_size);
++  if (!VP8BitWriterInit(&result->bw, ALPHA_HEADER_LEN + output_size)) ok = 0;
+   ok = ok && VP8BitWriterAppend(&result->bw, &header, ALPHA_HEADER_LEN);
+   ok = ok && VP8BitWriterAppend(&result->bw, output, output_size);
+ 
+   if (method != ALPHA_NO_COMPRESSION) {
+     VP8LBitWriterWipeOut(&tmp_bw);
+   }
+   ok = ok && !result->bw.error_;
+   result->score = VP8BitWriterSize(&result->bw);
+
