@@ -1,0 +1,19 @@
+diff --git a/src/dec/idec_dec.c b/src/dec/idec_dec.c
+index a371ed7..258d15b 100644
+--- a/src/dec/idec_dec.c
++++ b/src/dec/idec_dec.c
+
+@@ -283,10 +283,8 @@
+ 
+ static VP8StatusCode IDecError(WebPIDecoder* const idec, VP8StatusCode error) {
+   if (idec->state_ == STATE_VP8_DATA) {
+-    VP8Io* const io = &idec->io_;
+-    if (io->teardown != NULL) {
+-      io->teardown(io);
+-    }
++    // Synchronize the thread, clean-up and check for errors.
++    VP8ExitCritical((VP8Decoder*)idec->dec_, &idec->io_);
+   }
+   idec->state_ = STATE_ERROR;
+   return error;
+
