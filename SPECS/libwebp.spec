@@ -2,7 +2,7 @@
 
 Name:          libwebp
 Version:       1.2.0
-Release:       7%{?dist}
+Release:       8%{?dist}
 URL:           http://webmproject.org/
 Summary:       Library and tools for the WebP graphics format
 # Additional IPR is licensed as well. See PATENTS file for details
@@ -148,8 +148,12 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 
 
 %changelog
-* Fri Wep 15 2023 Martin Stransky <stransky@redhat.com> - 1.2.0-7
+* Fri Sep 15 2023 Martin Stransky <stransky@redhat.com> - 1.2.0-8
 - Added fix for CVE-2023-4863
+
+* Wed May 03 2023 Tomas Popela <tpopela@redhat.com> - 1.2.0-7
+- Bump the release to "7" to accommodate the 9.1.0.z release bumps as
+  libwebp-1.2.0-6.el9 < libwebp-1.2.0-6.el9_1
 
 * Wed May 03 2023 Tomas Popela <tpopela@redhat.com> - 1.2.0-6
 - Add fix for mzbz#1819244
