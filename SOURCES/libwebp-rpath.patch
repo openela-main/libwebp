@@ -1,0 +1,20 @@
+diff -rupN --no-dereference libwebp-1.3.2/CMakeLists.txt libwebp-1.3.2-new/CMakeLists.txt
+--- libwebp-1.3.2/CMakeLists.txt	2023-09-28 20:47:39.607153769 +0200
++++ libwebp-1.3.2-new/CMakeLists.txt	2023-09-28 20:47:39.610153800 +0200
+@@ -112,11 +112,11 @@ endif()
+ include(cmake/deps.cmake)
+ include(GNUInstallDirs)
+ 
+-if(BUILD_SHARED_LIBS AND NOT DEFINED CMAKE_INSTALL_RPATH)
+-  # Set the rpath to match autoconf/libtool behavior. Note this must be set
+-  # before target creation.
+-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+-endif()
++# if(BUILD_SHARED_LIBS AND NOT DEFINED CMAKE_INSTALL_RPATH)
++#   # Set the rpath to match autoconf/libtool behavior. Note this must be set
++#   # before target creation.
++#   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
++# endif()
+ 
+ # ##############################################################################
+ # Options.
