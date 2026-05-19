@@ -21,11 +21,11 @@
 
 Name:          libwebp
 Version:       1.3.2
-Release:       8%{?dist}
+Release:       10%{?dist}
 URL:           http://webmproject.org/
 Summary:       Library and tools for the WebP graphics format
 # Additional IPR is licensed as well. See PATENTS file for details
-License:       BSD
+License:       BSD-3-Clause WITH AdditionRef-WebM-patent-license
 Source0:       http://downloads.webmproject.org/releases/webp/%{name}-%{version}.tar.gz
 Source1:       libwebp_jni_example.java
 # Fix build with freeglut
@@ -295,6 +295,12 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 
 
 %changelog
+* Thu Jan 22 2026 Martin Stransky <stransky@redhat.com> - 1.3.2-10
+- Updated License (RHEL-105872)
+
+* Thu Nov 21 2024 Tomas Popela <tpopela@redhat.com> - 1.3.2-9
+- Backport the move to SPDX license format
+
 * Tue Oct 29 2024 Troy Dawson <tdawson@redhat.com> - 1.3.2-8
 - Bump release for October 2024 mass rebuild:
   Resolves: RHEL-64018
